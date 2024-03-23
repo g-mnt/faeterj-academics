@@ -3,9 +3,12 @@ module.exports = function(api) {
   return {
     presets: [
         'babel-preset-expo',
-        ['@babel/preset-env', {targets: {node: 'current'}}],
-        '@babel/preset-typescript',
     ],
+      env: {
+          production: {
+              plugins: ['react-native-paper/babel'],
+          },
+      },
       plugins: [
           ['module-resolver', {
               alias: {
