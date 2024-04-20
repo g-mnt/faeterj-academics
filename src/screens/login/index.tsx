@@ -28,7 +28,6 @@ export const LoginScreen = withGuestLayout(() => {
     const [errors, setErrors] = useState<LoginErrors>(initialLoginErrors)
     const handleEmailChange = (value: string) => {
         const validation = validateEmail(value, true)
-
         setErrors((errors) => ({
             ...errors,
             email:  validation.approved ? false : validation.rule === RequiredRule ?
@@ -45,7 +44,6 @@ export const LoginScreen = withGuestLayout(() => {
 
     const handlePasswordChange = (value: string) => {
         const validation = validateRequired(value)
-
         setErrors((errors) => ({
             ...errors,
             password:  validation.approved ? false : PASSWORD_REQUIRED_ERROR,
@@ -99,7 +97,7 @@ export const LoginScreen = withGuestLayout(() => {
                             theme={{roundness: 20}}
                             mode="outlined"
                             label="Senha"
-                            testID="senha-input"
+                            testID="password-input"
                             placeholder="Senha"
                             secureTextEntry={true}
                             value={form.password}

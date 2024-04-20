@@ -5,13 +5,13 @@ jest.useFakeTimers();
 
 describe('Login screen', () => {
     it('should render email input', () => {
-        const {getByTestId, debug} = render(<LoginScreen />);
+        const {getByTestId} = render(<LoginScreen />);
         getByTestId('email-input');
     });
 
     it('should render password input', () => {
         const {getByTestId} = render(<LoginScreen />);
-        getByTestId('senha-input');
+        getByTestId('password-input');
     });
 
     it('should render login button', () => {
@@ -32,7 +32,7 @@ describe('Login screen', () => {
         expect(mockNavigateFn).toHaveBeenCalledWith("ForgotPassword");
     });
 
-    it('should render email required error', () => {
+    it('should render email errors', () => {
         const {getByText, getByTestId} = render(<LoginScreen/>);
         const emailInput = getByTestId('email-input');
 
@@ -46,6 +46,19 @@ describe('Login screen', () => {
         fireEvent.changeText(emailInput, 'email@email.');
         fireEvent(emailInput, "blur");
         getByText('Email inválido!');
+    })
+
+    it('should render password errors', () => {
+        const {getByText, getByTestId} = render(<LoginScreen/>);
+        const passwordInput = getByTestId('password-input');
+
+        fireEvent(passwordInput, "blur");
+        getByText('Senha obrigatória!');
+
+        fireEvent.changeText(passwordInput, "   ")
+        fireEvent(passwordInput, "blur");
+        getByText('Senha obrigatória!');
+
     })
 
     it('should login the user', () => {
