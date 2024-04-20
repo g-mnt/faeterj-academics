@@ -24,6 +24,13 @@ describe('Login screen', () => {
         getByText('Esqueci minha senha');
     })
 
+    it('should navigate to forgot password screen', () => {
+        const {getByText} = render(<LoginScreen />);
+        const forgotPasswordButton = getByText('Esqueci minha senha');
+
+        expect(mockNavigateFn).toHaveBeenCalledWith("ForgotPassword");
+    });
+
     it('should render email required error', () => {
         const {getByText, getByTestId} = render(<LoginScreen/>);
         const emailInput = getByTestId('email-input');

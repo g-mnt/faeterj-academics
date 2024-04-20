@@ -108,6 +108,15 @@ export const LoginScreen = withGuestLayout(() => {
                         {errors.password && errors.touchedPassword ? (
                             <ErrorMessage message={errors.password} />
                         ) : null}
+                        <Button
+                            style={{alignSelf: "center"}}
+                            labelStyle={{fontSize: 16, fontWeight: "normal"}}
+                            rippleColor="transparent"
+                            mode="text"
+                            onPress={() => {}}
+                        >
+                            Esqueci minha senha
+                        </Button>
                     </View>
                     <Button mode="contained" disabled={!!errors.email || !!errors.password} onPress={handleSubmit}>
                         Login
