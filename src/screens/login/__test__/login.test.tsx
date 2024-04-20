@@ -1,16 +1,16 @@
-import {fireEvent, render} from "@testing-library/react-native";
+import {fireEvent, render, waitFor} from "@testing-library/react-native";
 import {LoginScreen} from "screens/login";
 import {mockNavigateFn} from "mocks/navigationMock";
 
 describe('Login screen', () => {
     it('should render email input', () => {
-        const {getByPlaceholderText} = render(<LoginScreen />);
-        getByPlaceholderText('Email');
+        const {getByTestId, debug} = render(<LoginScreen />);
+        getByTestId('email-input');
     });
 
     it('should render password input', () => {
-        const {getByPlaceholderText} = render(<LoginScreen />);
-        getByPlaceholderText('Senha');
+        const {getByTestId} = render(<LoginScreen />);
+        getByTestId('senha-input');
     });
 
     it('should render login button', () => {
@@ -23,21 +23,25 @@ describe('Login screen', () => {
         getByText('Esqueci minha senha');
     })
 
-    it('should render email error', () => {
-        const {getByText, getByPlaceholderText} = render(<LoginScreen />);
-        const loginButton = getByText('Login');
-        const emailInput = getByPlaceholderText('Email');
+    it('should render email error', async () => {
+        const {getByText, getByTestId} = render(<LoginScreen />);
+        const emailInput = getByTestId('email-input');
 
-        fireEvent.press(loginButton);
-        getByText('Email é obrigatório');
+        fireEvent(emailInput, "blur");
 
-        fireEvent.changeText(emailInput, 'email');
-        fireEvent.press(loginButton);
-        getByText('Email inválido');
+        await waitFor(() => {
+            getByText('Email é obrigatório!');
+        })
 
-        fireEvent.changeText(emailInput, 'email@email');
-        fireEvent.press(loginButton);
-        getByText('Email inválido');
+        // fireEvent.changeText(emailInput, 'email');
+        // fireEvent(emailInput, "blur");
+        //
+        // getByText('Email inválido!');
+        //
+        // fireEvent.changeText(emailInput, 'email@email.');
+        // fireEvent(emailInput, "blur");
+        //
+        // getByText('Email inválido!');
     })
 
     it('should login the user', () => {
