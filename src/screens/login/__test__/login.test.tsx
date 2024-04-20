@@ -1,6 +1,7 @@
-import {fireEvent, render, waitFor} from "@testing-library/react-native";
+import {fireEvent, render} from "@testing-library/react-native";
 import {LoginScreen} from "screens/login";
 import {mockNavigateFn} from "mocks/navigationMock";
+jest.useFakeTimers();
 
 describe('Login screen', () => {
     it('should render email input', () => {
@@ -23,31 +24,26 @@ describe('Login screen', () => {
         getByText('Esqueci minha senha');
     })
 
-    it('should render email error', async () => {
-        const {getByText, getByTestId} = render(<LoginScreen />);
+    it('should render email required error', () => {
+        const {getByText, getByTestId} = render(<LoginScreen/>);
         const emailInput = getByTestId('email-input');
 
         fireEvent(emailInput, "blur");
+        getByText('Email obrigatório!');
 
-        await waitFor(() => {
-            getByText('Email é obrigatório!');
-        })
+        fireEvent.changeText(emailInput, 'email');
+        fireEvent(emailInput, "blur");
+        getByText('Email inválido!');
 
-        // fireEvent.changeText(emailInput, 'email');
-        // fireEvent(emailInput, "blur");
-        //
-        // getByText('Email inválido!');
-        //
-        // fireEvent.changeText(emailInput, 'email@email.');
-        // fireEvent(emailInput, "blur");
-        //
-        // getByText('Email inválido!');
+        fireEvent.changeText(emailInput, 'email@email.');
+        fireEvent(emailInput, "blur");
+        getByText('Email inválido!');
     })
 
     it('should login the user', () => {
-        const {getByPlaceholderText, getByText} = render(<LoginScreen />)
-        const emailInput = getByPlaceholderText('Email');
-        const passwordInput = getByPlaceholderText('Password');
+        const {getByTestId, getByText} = render(<LoginScreen />)
+        const emailInput = getByTestId('email-input');
+        const passwordInput = getByTestId('password-input');
 
         fireEvent(emailInput, 'valid@email.com');
         fireEvent(passwordInput, 'validPassword');
