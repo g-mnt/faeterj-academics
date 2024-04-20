@@ -7,6 +7,8 @@ import {ErrorMessage} from "components/ErrorMessage";
 import {EMAIL_INVALID_ERROR, EMAIL_REQUIRED_ERROR, PASSWORD_REQUIRED_ERROR} from "screens/login/constants";
 import {validateEmail, validateRequired} from "src/helpers";
 import {RequiredRule} from "src/helpers/constants";
+import {GuestStackScreenProps} from "navigations/types";
+import {useNavigation} from "@react-navigation/native";
 
 const initialLoginForm: LoginForm = {
     email: "",
@@ -21,6 +23,7 @@ const initialLoginErrors: LoginErrors = {
 }
 
 export const LoginScreen = withGuestLayout(() => {
+    const {navigate} = useNavigation<GuestStackScreenProps>();
     const [form, setForm] = useState<LoginForm>(initialLoginForm)
     const [errors, setErrors] = useState<LoginErrors>(initialLoginErrors)
     const handleEmailChange = (value: string) => {
@@ -113,7 +116,7 @@ export const LoginScreen = withGuestLayout(() => {
                             labelStyle={{fontSize: 16, fontWeight: "normal"}}
                             rippleColor="transparent"
                             mode="text"
-                            onPress={() => {}}
+                            onPress={() => navigate("ForgotPassword")}
                         >
                             Esqueci minha senha
                         </Button>

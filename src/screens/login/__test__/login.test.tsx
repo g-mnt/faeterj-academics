@@ -27,6 +27,7 @@ describe('Login screen', () => {
     it('should navigate to forgot password screen', () => {
         const {getByText} = render(<LoginScreen />);
         const forgotPasswordButton = getByText('Esqueci minha senha');
+        fireEvent.press(forgotPasswordButton)
 
         expect(mockNavigateFn).toHaveBeenCalledWith("ForgotPassword");
     });
