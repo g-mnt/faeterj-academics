@@ -1,5 +1,5 @@
 import React from 'react';
-import {Icon, Text} from 'react-native-paper';
+import {Avatar, Icon, Text} from 'react-native-paper';
 import {View} from 'react-native';
 
 export const Header = ({pageTitle}: {pageTitle: string}) => {
@@ -13,9 +13,9 @@ export const Header = ({pageTitle}: {pageTitle: string}) => {
            paddingVertical:15,
            borderBottomWidth: 0.8,
        }}>
-           <Icon size={25} source={require('@assets/app_icon.jpg')} />
-           <Text style={{fontWeight: '900', fontSize: 18 }} adjustsFontSizeToFit>{pageTitle}</Text>
-           <Icon size={25} source={require('@assets/app_icon.jpg')} />
+           <Icon size={35} source={require('@assets/app_icon.jpg')} />
+           <Text style={{fontWeight: '900', fontSize: 22 }}>{pageTitle}</Text>
+           <Avatar.Icon size={35} icon="account"  />
        </View>
     );
 };
