@@ -9,6 +9,9 @@ import {validateEmail, validateRequired} from "src/helpers";
 import {RequiredRule} from "src/helpers/constants";
 import {GuestStackScreenProps} from "navigations/types";
 import {useNavigation} from "@react-navigation/native";
+import {AuthRepository} from "repositories/auth";
+import {useFetch} from "hooks/useFetch";
+import {useAuthenticate} from "hooks/useAuthenticate";
 
 const initialLoginForm: LoginForm = {
     email: "",
@@ -26,6 +29,9 @@ export const LoginScreen = withGuestLayout(() => {
     const {navigate} = useNavigation<GuestStackScreenProps>();
     const [form, setForm] = useState<LoginForm>(initialLoginForm)
     const [errors, setErrors] = useState<LoginErrors>(initialLoginErrors)
+    const [, fetchLogin] = useFetch(AuthRepository.login)
+    const {authenticate} = useAuthenticate();
+
     const handleEmailChange = (value: string) => {
         const validation = validateEmail(value, true)
         setErrors((errors) => ({
@@ -64,8 +70,14 @@ export const LoginScreen = withGuestLayout(() => {
         }))
     }
 
-    const handleSubmit = () => {
-        console.log(form)
+    const handleSubmit = async () => {
+        try{
+            const data = await fetchLogin(form);
+            if(data) {
+                authenticate(data.user, data.token);
+            }
+        }catch(e) {
+        }
     }
     return (
         <View style={{flex: 1, justifyContent:"center", width:"100%", maxWidth:520 }}>
