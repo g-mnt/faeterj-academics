@@ -1,8 +1,10 @@
 import React from 'react';
 import {Avatar, Icon, Text} from 'react-native-paper';
-import {View} from 'react-native';
+import {View, Pressable} from 'react-native';
+import {DrawerActions, useNavigation} from "@react-navigation/native";
 
 export const Header = ({pageTitle}: {pageTitle: string}) => {
+    const navigation = useNavigation();
     return (
        <View style={{
            flexDirection: 'row',
@@ -13,7 +15,9 @@ export const Header = ({pageTitle}: {pageTitle: string}) => {
            paddingVertical:15,
            borderBottomWidth: 0.8,
        }}>
-           <Icon size={35} source={require('@assets/app_icon.jpg')} />
+           <Pressable onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
+                <Icon size={35} source={require('@assets/app_icon.jpg')} />
+           </Pressable>
            <Text style={{fontWeight: '900', fontSize: 22 }}>{pageTitle}</Text>
            <Avatar.Icon size={35} icon="account"  />
        </View>
