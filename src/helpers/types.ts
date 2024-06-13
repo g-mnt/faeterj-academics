@@ -1,4 +1,4 @@
-import { EmailRule, RequiredRule} from "src/helpers/constants";
+import { EmailRule, RequiredRule } from "src/helpers/constants";
 
 export type ValidationRules = typeof EmailRule | typeof RequiredRule;
 export type ValidationReturn = {

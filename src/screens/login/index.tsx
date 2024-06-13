@@ -4,9 +4,8 @@ import {Button, Icon, TextInput} from "react-native-paper";
 import {withGuestLayout} from "src/HOC/withGuestLayout";
 import {LoginErrors, LoginForm} from "screens/login/types";
 import {ErrorMessage} from "components/ErrorMessage";
-import {EMAIL_INVALID_ERROR, EMAIL_REQUIRED_ERROR, PASSWORD_REQUIRED_ERROR} from "screens/login/constants";
+import {EMAIL_INVALID_ERROR, PASSWORD_REQUIRED_ERROR} from "screens/login/constants";
 import {validateEmail, validateRequired} from "src/helpers";
-import {RequiredRule} from "src/helpers/constants";
 import {GuestStackScreenProps} from "navigations/types";
 import {useNavigation} from "@react-navigation/native";
 import {AuthRepository} from "repositories/auth";
@@ -19,7 +18,7 @@ const initialLoginForm: LoginForm = {
 }
 
 const initialLoginErrors: LoginErrors = {
-    email: EMAIL_REQUIRED_ERROR,
+    email: EMAIL_INVALID_ERROR,
     touchedEmail: false,
     password: PASSWORD_REQUIRED_ERROR,
     touchedPassword: false
@@ -36,9 +35,7 @@ export const LoginScreen = withGuestLayout(() => {
         const validation = validateEmail(value, true)
         setErrors((errors) => ({
             ...errors,
-            email:  validation.approved ? false : validation.rule === RequiredRule ?
-                    EMAIL_REQUIRED_ERROR :
-                    EMAIL_INVALID_ERROR,
+            email:  validation.approved ? false : EMAIL_INVALID_ERROR,
             touchedEmail: false,
         }))
 

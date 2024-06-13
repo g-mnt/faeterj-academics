@@ -1,7 +1,15 @@
-import {fireEvent, render} from "@testing-library/react-native";
+import {fireEvent, render, waitFor} from "@testing-library/react-native";
 import {LoginScreen} from "screens/login";
 import {mockNavigateFn} from "mocks/navigationMock";
+import {mockLoginFunction, mockLoginUser, mockToken} from "mocks/authRepositoryMock";
+import * as authenticate from "hooks/useAuthenticate";
+import {AxiosError} from "axios";
 jest.useFakeTimers();
+
+const form = {
+    email: "gabriel@faeterj.com",
+    password: "password"
+}
 
 describe('Login screen', () => {
     it('should render email input', () => {
@@ -32,12 +40,9 @@ describe('Login screen', () => {
         expect(mockNavigateFn).toHaveBeenCalledWith("ForgotPassword");
     });
 
-    it('should render email errors', () => {
+    it('should render email invalid error', () => {
         const {getByText, getByTestId} = render(<LoginScreen/>);
         const emailInput = getByTestId('email-input');
-
-        fireEvent(emailInput, "blur");
-        getByText('Email obrigatório!');
 
         fireEvent.changeText(emailInput, 'email');
         fireEvent(emailInput, "blur");
@@ -58,19 +63,50 @@ describe('Login screen', () => {
         fireEvent.changeText(passwordInput, "   ")
         fireEvent(passwordInput, "blur");
         getByText('Senha obrigatória!');
-
     })
 
-    it('should login the user', () => {
-        const {getByTestId, getByText} = render(<LoginScreen />)
-        const emailInput = getByTestId('email-input');
-        const passwordInput = getByTestId('password-input');
+    it('should call login endpoint with login form', async () => {
+        performLogin()
 
-        fireEvent(emailInput, 'valid@email.com');
-        fireEvent(passwordInput, 'validPassword');
+        await waitFor(() => {
+            expect(mockLoginFunction).toHaveBeenCalledWith({...form});
+        })
+    });
 
-        const loginButton= getByText('Login');
-        fireEvent.press(loginButton);
-        expect(mockNavigateFn).toHaveBeenCalledWith("Home");
-    })
+    it('should call authenticate with login response data', async () => {
+        const mockAuthenticateFn = jest.fn();
+        jest.spyOn(authenticate, "useAuthenticate").mockReturnValue({
+            authenticate: mockAuthenticateFn
+        })
+
+        performLogin()
+
+        await waitFor(() => {
+            expect(mockAuthenticateFn).toHaveBeenCalledWith({...mockLoginUser}, mockToken);
+        })
+    });
+
+    it('should not call authenticate if login fails', async () => {
+        const mockAuthenticateFn = jest.fn();
+        mockLoginFunction.mockImplementation( () => {throw new AxiosError("something went wrong");});
+        jest.spyOn(authenticate, "useAuthenticate").mockReturnValue({
+            authenticate: mockAuthenticateFn
+        })
+
+        performLogin()
+
+        await waitFor(() => {
+            expect(mockAuthenticateFn).not.toHaveBeenCalled();
+        })
+    });
 });
+
+function performLogin(){
+    const {getByTestId, getByText} = render(<LoginScreen />)
+
+    fireEvent.changeText(getByTestId('email-input'), form.email);
+    fireEvent.changeText(getByTestId('password-input'), form.password);
+
+    const loginButton= getByText('Login');
+    fireEvent.press(loginButton);
+}

@@ -6,17 +6,3 @@ export const storeToken = async (token: string) => {
     } catch (e) {
     }
 }
-
-export const getToken = async () => {
-    try {
-        return await AsyncStorage.getItem(TOKEN_KEY);
-    } catch (e) {
-    }
-}
-
-export const removeToken = async () => {
-    try {
-        await AsyncStorage.removeItem(TOKEN_KEY);
-    } catch (e) {
-    }
-}
