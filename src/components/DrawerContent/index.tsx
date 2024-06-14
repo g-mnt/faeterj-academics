@@ -3,11 +3,13 @@ import {Pressable, View} from "react-native";
 import {DrawerContentComponentProps} from "@react-navigation/drawer";
 import {useRoutes} from "hooks/useRoutes";
 import {useUserStore} from "src/store/user";
+import {useLogout} from "hooks/useLogout";
 
 export const DrawerContent = ({navigation, state}: DrawerContentComponentProps) => {
     const user = useUserStore((state) => state.user);
     const {routes} = useRoutes();
     const {colors} = useTheme()
+    const {logout} = useLogout();
     return (
         <View style={{ flex:1, width: "100%" }}>
             <View style={{
@@ -65,7 +67,9 @@ export const DrawerContent = ({navigation, state}: DrawerContentComponentProps) 
                             <Text>{user?.email}</Text>
                         </View>
                     </View>
-                    <Icon size={25} source='logout' color={colors.primary} />
+                    <Pressable onPress={logout}>
+                        <Icon size={25} source='logout' color={colors.primary} />
+                    </Pressable>
                 </View>
             </View>
         </View>
