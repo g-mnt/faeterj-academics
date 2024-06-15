@@ -8,4 +8,5 @@ export type LoginResponse = {
 
 export type AuthRepositoryData = {
     login: (loginForm: LoginForm) => Promise<LoginResponse>
+    self: () => Promise<User>
 }

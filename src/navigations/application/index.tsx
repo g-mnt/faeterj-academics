@@ -5,14 +5,16 @@ import React from "react";
 import {ApplicationStackParamList, GuestStackParamList} from "navigations/types";
 import {ForgotPasswordScreen} from "screens/forgotPassword";
 import {HomeScreen} from "screens/home";
-const Stack = createStackNavigator<ApplicationStackParamList>();
+import {createDrawerNavigator} from "@react-navigation/drawer";
+import {DrawerContent} from "components/DrawerContent";
+const Drawer = createDrawerNavigator<ApplicationStackParamList>();
 
 export const ApplicationNavigation: React.FC = () => {
     return (
         <NavigationContainer>
-            <Stack.Navigator screenOptions={{headerShown: false}}>
-                <Stack.Screen name="Home" component={HomeScreen} />
-            </Stack.Navigator>
+            <Drawer.Navigator screenOptions={{headerShown: false, drawerStyle: {width: '100%' }}} drawerContent={DrawerContent}>
+                <Drawer.Screen name="Home" component={HomeScreen} />
+            </Drawer.Navigator>
         </NavigationContainer>
     )
 }
