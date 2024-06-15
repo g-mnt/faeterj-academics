@@ -8,11 +8,7 @@ interface UserState {
 }
 
 export const useUserStore = create<UserState>((set) => ({
-    user: {
-        id: 0,
-        name: 'Gabriel Monteiro',
-        email: 'gabriel@faeterj.com',
-    },
+    user: null,
     setUser: (user) => set(() => ({ user })),
     unsetUser: () => set(() => ({user: null}))
 }))
