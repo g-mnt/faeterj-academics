@@ -1,71 +1,27 @@
 import {View, StyleSheet, FlatList} from "react-native";
 import {withAuthLayout} from "src/HOC/withAuthLayout";
 import {ArticleCard} from "components/ArticleCard";
+import {ArticleRepository} from "repositories/article";
+import {useFetch} from "hooks/useFetch";
+import {Text} from "react-native-paper";
 
 export const HomeScreen = withAuthLayout(() => {
-    const author = {
-        name: 'Miguel',
-        role: 'Professor'
-    };
-
-    const articles = [{
-        title: 'Lorem Ipsum',
-        description: 'lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua',
-        author,
-        favorite: true,
-    },
-        {
-            title: 'Lorem Ipsum',
-            description: 'lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua',
-            author,
-            favorite: true,
-        },
-        {
-            title: 'Lorem Ipsum',
-            description: 'lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua',
-            author,
-            favorite: true,
-        },
-        {
-            title: 'Lorem Ipsum',
-            description: 'lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua',
-            author,
-            favorite: false,
-        },
-        {
-            title: 'Lorem Ipsum',
-            description: 'lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua',
-            author,
-            favorite: false
-        },
-        {
-            title: 'Lorem Ipsum',
-            description: 'lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua',
-            author,
-            favorite: false
-        },
-        {
-            title: 'Lorem Ipsum',
-            description: 'lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua',
-            author,
-            favorite: false
-        },
-        {
-            title: 'Lorem Ipsum',
-            description: 'lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua',
-            author,
-            favorite: true
-        },
-    ]
+    const [{data}] = useFetch(ArticleRepository.index, {params: {}});
     return (
         <View>
-            <FlatList data={articles} renderItem={({item, index})  => (
-                <ArticleCard
-                    key={index}
-                    style={styles.article}
-                    article={item}
-                />
-            )}/>
+            {data ? (
+                <FlatList data={data.data} renderItem={({item, index})  => (
+                    <ArticleCard
+                        key={index}
+                        style={styles.article}
+                        article={{
+                            ...item,
+                            favorite: false
+                        }}
+                    />
+                )}/>
+            ) : <Text>No data</Text>}
+
         </View>
     )
 });
