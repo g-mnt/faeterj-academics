@@ -4,8 +4,8 @@ import {Article} from "types/models/article";
 import {api} from "src/services/api";
 
 export const ArticleRepository: ArticleRepositoryData = {
-    index: async () => {
-        const {data} = await api.get<PaginatedResponse<Article>>("articles");
+    index: async (params) => {
+        const {data} = await api.get<PaginatedResponse<Article>>("articles", {params});
         return data;
     }
 }

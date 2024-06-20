@@ -1,5 +1,7 @@
 import {AxiosError} from "axios";
 
+export type FetchFunctionProps<P,T> = (params: P) => Promise<T>
+
 export type FetchApiProps<T> = {
     params?: T,
 }

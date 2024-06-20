@@ -2,24 +2,28 @@ import {View, StyleSheet, FlatList} from "react-native";
 import {withAuthLayout} from "src/HOC/withAuthLayout";
 import {ArticleCard} from "components/ArticleCard";
 import {ArticleRepository} from "repositories/article";
-import {useFetch} from "hooks/useFetch";
 import {Text} from "react-native-paper";
+import {useInfinityScroll} from "hooks/useInfinityScroll";
 
 export const HomeScreen = withAuthLayout(() => {
-    const [{data}] = useFetch(ArticleRepository.index, {params: {}});
+    const {data, loadMore} = useInfinityScroll(ArticleRepository.index, {params: {}});
     return (
         <View>
             {data ? (
-                <FlatList data={data.data} renderItem={({item, index})  => (
-                    <ArticleCard
-                        key={index}
-                        style={styles.article}
-                        article={{
-                            ...item,
-                            favorite: false
-                        }}
-                    />
-                )}/>
+                <FlatList
+                    data={data}
+                    onEndReached={loadMore}
+                    renderItem={({item, index})  => (
+                        <ArticleCard
+                            key={index}
+                            style={styles.article}
+                            article={{
+                                ...item,
+                                favorite: false
+                            }}
+                        />
+                    )}
+                />
             ) : <Text>No data</Text>}
 
         </View>

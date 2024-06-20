@@ -1,3 +1,8 @@
+export type PaginatedRequestProps = {
+    page?: number;
+    per_page?: number;
+}
+
 export type Meta = {
     current_page: number;
     last_page: number;
