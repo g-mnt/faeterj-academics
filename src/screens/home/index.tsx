@@ -24,9 +24,7 @@ export const HomeScreen = withAuthLayout(() => {
                         }}
                     />
                 )}
-                ListEmptyComponent={
-                    !isLoading ? <NoDataCard message={'Nenhum artigo encontrado'} /> : null
-                }
+                ListEmptyComponent={ !isLoading ? <NoDataCard message={'Nenhum artigo encontrado'} /> : null }
                 ListFooterComponent={isLoading ? <ActivityIndicator /> : null}
             />
         </View>
