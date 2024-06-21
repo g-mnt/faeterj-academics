@@ -1,12 +1,10 @@
 import {useCallback, useEffect, useState} from "react";
-import {FetchApiProps, FetchApiReturn} from "hooks/useFetch/types";
+import {FetchApiProps, FetchApiReturn, FetchFunctionProps} from "hooks/useFetch/types";
 import {AxiosError} from "axios";
 
 export const useFetch = <P, T>(
-    fetchFunction: (v: P) => Promise<T>,
-    {
-        params
-    }:FetchApiProps<P> = {}
+    fetchFunction: FetchFunctionProps<P, T>,
+    {params}:FetchApiProps<P> = {}
 ): FetchApiReturn<P,T> => {
     const [data, setData] = useState<T | null>(null)
     const [isLoading, setLoading] = useState(false);
