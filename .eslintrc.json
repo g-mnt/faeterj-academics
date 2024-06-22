@@ -15,6 +15,7 @@
         "react"
     ],
     "rules": {
+        "@typescript-eslint/consistent-type-definitions": "off" 
     },
     "settings": {
         "react": {

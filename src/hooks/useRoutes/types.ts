@@ -1,7 +1,7 @@
 import type React from 'react'
 import { type ApplicationStackParamList } from 'src/navigations/types'
 
-export interface RouteData {
+export type RouteData = {
   name: keyof ApplicationStackParamList
   component: React.FC
   icon: string
@@ -9,6 +9,6 @@ export interface RouteData {
   displayName: string
 }
 
-export interface UseRoutesData {
+export type UseRoutesData = {
   routes: RouteData[]
 }

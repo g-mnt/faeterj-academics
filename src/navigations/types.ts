@@ -1,10 +1,10 @@
 import { type StackNavigationProp } from '@react-navigation/stack'
-export interface GuestStackParamList {
+export type GuestStackParamList = {
   Login: undefined
   ForgotPassword: undefined
 }
 
-export interface ApplicationStackParamList {
+export type ApplicationStackParamList = {
   Home: undefined
   PublishArticle: undefined
 }

@@ -1,24 +1,29 @@
 import React, { useState } from 'react'
-import { Pressable, StyleSheet, View } from 'react-native'
-import { Button, Text, TextInput } from 'react-native-paper'
+import { KeyboardAvoidingView, Pressable, ScrollView, StyleSheet, View } from 'react-native'
+import { Button, Icon, Text, TextInput, useTheme } from 'react-native-paper'
 import { withAuthLayout } from 'src/HOC/withAuthLayout'
 import * as DocumentPicker from 'expo-document-picker'
 export const PublishArticleScreen = withAuthLayout(() => {
-  const [form, setForm] = useState({
-    title: '',
-    description: ''
-  })
+  const {colors} = useTheme()
+  const [title, setTitle] = useState('')
+  const [description, setDescription] = useState('')
+  const [uploadedFile, setUploadedFile] = useState<DocumentPicker.DocumentPickerAsset | null>(null)
 
   async function handlePickFile (): Promise<void> {
-    const result = await DocumentPicker.getDocumentAsync()
-    if (result.output !== null) {
-      console.log(result)
+    const result = await DocumentPicker.getDocumentAsync({ type: 'application/pdf' })
+    if (!result.canceled) {
+      setUploadedFile(result.assets[0])
     }
   }
 
   return (
-        <View style={styles.mainContainer}>
-            <View>
+        <View style={{ flex: 1 }}>
+          <ScrollView
+            contentContainerStyle={styles.mainContainer}
+            keyboardShouldPersistTaps='always'
+            automaticallyAdjustKeyboardInsets
+          >
+            <View style={styles.formUpload}>
                 <Text style={styles.inputLabel}>Titulo</Text>
                 <TextInput
                     style={styles.input}
@@ -26,10 +31,8 @@ export const PublishArticleScreen = withAuthLayout(() => {
                     mode="outlined"
                     testID="email-input"
                     placeholder="Titulo"
-                    value={form.title}
-                    onChangeText={(value) => {
-                      setForm((form) => ({ ...form, title: value }))
-                    }}
+                    value={title}
+                    onChangeText={setTitle}
                     onBlur={() => { }}
                     // left={<TextInput.Icon icon="email-outline" />}
                 />
@@ -40,30 +43,38 @@ export const PublishArticleScreen = withAuthLayout(() => {
                     mode="outlined"
                     testID="email-input"
                     placeholder="Descrição"
-                    value={form.description}
-                    onChangeText={(value) => {
-                      setForm((form) => ({ ...form, description: value }))
-                    }}
+                    value={description}
+                    onChangeText={setDescription}
                     onBlur={() => { }}
                     // left={<TextInput.Icon icon="email-outline" />}
                 />
                 <Text style={styles.inputLabel}>PDF Upload</Text>
-                <Button onPress={handlePickFile} style={{ backgroundColor: 'red', alignItems: 'center', justifyContent: 'center' }}>
-                    <Text>Upload PDF</Text>
-                </Button>
+                <Pressable
+                    onPress={() => { handlePickFile().catch(() => {}) }}
+                    style={styles.uploadButton}>
+                    <Icon source='file-upload-outline' size={100} color={colors.primary} />
+                </Pressable>
+                {uploadedFile !== null && (
+                  <View style={styles.uploadedFileContainer}>
+                    <Text style={{ color: colors.error }} >{uploadedFile.name}</Text>
+                    <Icon source='trash-can-outline' size={30} color={colors.error} />
+                  </View>
+                )}
             </View>
             <Button
                 mode="contained"
                 onPress={() => { }}>
                 Publicar Artigo
             </Button>
+          </ScrollView>
         </View>
   )
 })
 
 const styles = StyleSheet.create({
   mainContainer: {
-    flex: 1,
+    flexGrow: 1,
+    flexShrink: 0,
     justifyContent: 'space-between'
   },
   inputLabel: {
@@ -73,5 +84,25 @@ const styles = StyleSheet.create({
   },
   input: {
     marginBottom: 25
+  },
+  formUpload: {
+    flex: 1,
+    marginBottom: 20
+  },
+  uploadButton: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderStyle: 'dashed',
+    borderRadius: 20,
+    padding: 30,
+    maxHeight: 250
+  },
+  uploadedFileContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: 20
   }
 })
