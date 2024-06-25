@@ -2,73 +2,30 @@ import React, { useState } from 'react'
 import { View } from 'react-native'
 import { Button, Icon, TextInput } from 'react-native-paper'
 import { withGuestLayout } from 'src/HOC/withGuestLayout'
-import { type LoginErrors, type LoginForm } from 'screens/login/types'
-import { ErrorMessage } from 'components/ErrorMessage'
-import { EMAIL_INVALID_ERROR, PASSWORD_REQUIRED_ERROR } from 'screens/login/constants'
-import { validateEmail, validateRequired } from 'src/helpers'
+import { type LoginForm } from 'screens/login/types'
 import { type GuestStackScreenProps } from 'navigations/types'
 import { useNavigation } from '@react-navigation/native'
 import { AuthRepository } from 'repositories/auth'
 import { useFetch } from 'hooks/useFetch'
 import { useAuthenticate } from 'hooks/useAuthenticate'
+import { Controller, useForm } from 'react-hook-form'
+import { Input } from 'src/components/Input'
+import { object, string } from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup'
 
-const initialLoginForm: LoginForm = {
-  email: '',
-  password: ''
-}
-
-const initialLoginErrors: LoginErrors = {
-  email: EMAIL_INVALID_ERROR,
-  touchedEmail: false,
-  password: PASSWORD_REQUIRED_ERROR,
-  touchedPassword: false
-}
+const formSchema = object({
+  email: string().required('O email é obrigatório!').email(),
+  password: string().required('A senha é obrigatória!')
+})
 
 export const LoginScreen = withGuestLayout(() => {
   const { navigate } = useNavigation<GuestStackScreenProps>()
-  const [form, setForm] = useState<LoginForm>(initialLoginForm)
-  const [errors, setErrors] = useState<LoginErrors>(initialLoginErrors)
+  const { control, handleSubmit, formState: { errors } } = useForm<LoginForm>({ resolver: yupResolver(formSchema) })
   const [, fetchLogin] = useFetch(AuthRepository.login)
   const { authenticate } = useAuthenticate()
   const [hiddenPassword, setHiddenPassword] = useState(true)
 
-  const handleEmailChange = (value: string): void => {
-    const validation = validateEmail(value, true)
-    setErrors((errors) => ({
-      ...errors,
-      email: validation.approved ? false : EMAIL_INVALID_ERROR,
-      touchedEmail: false
-    }))
-
-    setForm((form) => ({
-      ...form,
-      email: value
-    }))
-  }
-
-  const handlePasswordChange = (value: string): void => {
-    const validation = validateRequired(value)
-    setErrors((errors) => ({
-      ...errors,
-      password: validation.approved ? false : PASSWORD_REQUIRED_ERROR,
-      touchedPassword: false
-    }))
-
-    setForm((form) => ({
-      ...form,
-      password: value
-    }))
-  }
-
-  const handleBlur = (type: keyof LoginForm): void => {
-    setErrors((errors) => ({
-      ...errors,
-      touchedPassword: type === 'password' ? true : errors.touchedPassword,
-      touchedEmail: type === 'email' ? true : errors.touchedEmail
-    }))
-  }
-
-  const handleSubmit = async (): Promise<void> => {
+  const submitLogin = async (form: LoginForm): Promise<void> => {
     try {
       const data = await fetchLogin(form)
       if (data !== null) {
@@ -78,68 +35,75 @@ export const LoginScreen = withGuestLayout(() => {
     }
   }
   return (
-        <View style={{ flex: 1, justifyContent: 'center', width: '100%', maxWidth: 520 }}>
-            <View style={{ flex: 2, justifyContent: 'center', alignItems: 'center' }}>
-                <Icon size={120} source={require('@assets/app_icon.jpg')} />
-            </View>
+    <View style={{ flex: 1, justifyContent: 'center', width: '100%', maxWidth: 520 }}>
+      <View style={{ flex: 2, justifyContent: 'center', alignItems: 'center' }}>
+        <Icon size={120} source={require('@assets/app_icon.jpg')} />
+      </View>
+      <View style={{ flex: 2 }}>
+        <View style={{ flex: 1 }}>
+          <View style={{ flex: 2 }}>
+            <Controller
+              control={control}
+              name='email'
+              render={ ({ field: { onChange, value } }) => (
+                <Input
+                  containerStyle={{ marginBottom: 10 }}
+                  theme={{ roundness: 20 }}
+                  testID="email-input"
+                  mode="outlined"
+                  label="Email"
+                  value={value}
+                  onChangeText={onChange}
+                  error={errors.email !== undefined}
+                  errorMessage={errors.email?.message}
+                />
+              )}
+            />
+            <Controller
+              control={control}
+              name='password'
+              render={ ({ field: { onChange, value } }) => (
+                <Input
+                  containerStyle={{ marginBottom: 10 }}
+                  theme={{ roundness: 20 }}
+                  testID="password-input"
+                  mode="outlined"
+                  label="Senha"
+                  value={value}
+                  onChangeText={onChange}
+                  error={errors.password !== undefined}
+                  errorMessage={errors.password?.message}
+                  secureTextEntry={hiddenPassword}
+                  right={
+                    <TextInput.Icon
+                      onPress={() => { setHiddenPassword(!hiddenPassword) } }
+                      icon={hiddenPassword ? 'eye' : 'eye-off'}
+                    />
+                  }
+                  left={<TextInput.Icon icon="lock-outline" />}
+                />
+              )}
+            />
 
-            <View style={{ flex: 2 }}>
-                <View style={{ flex: 1 }}>
-                    <View style={{ flex: 2 }}>
-                        <TextInput
-                            style={{ marginBottom: 10 }}
-                            theme={{ roundness: 20 }}
-                            mode="outlined"
-                            label="Email"
-                            testID="email-input"
-                            placeholder="Email"
-                            value={form.email}
-                            onChangeText={handleEmailChange}
-                            onBlur={() => { handleBlur('email') }}
-                            left={<TextInput.Icon icon="email-outline" />}
-                        />
-                        {errors.email !== null && errors.touchedEmail
-                          ? (
-                            <ErrorMessage message={errors.email} style={{ marginBottom: 8 }} />
-                            )
-                          : null}
-                        <TextInput
-                            style={{ marginBottom: 10 }}
-                            theme={{ roundness: 20 }}
-                            mode="outlined"
-                            label="Senha"
-                            testID="password-input"
-                            placeholder="Senha"
-                            secureTextEntry={hiddenPassword}
-                            value={form.password}
-                            onChangeText={handlePasswordChange}
-                            onBlur={() => { handleBlur('password') }}
-                            right={<TextInput.Icon onPress={() => { setHiddenPassword(!hiddenPassword) }}icon="eye" />}
-                            left={<TextInput.Icon icon="lock-outline" />}
-                        />
-                        {typeof errors.password === 'string' && errors.touchedPassword
-                          ? (
-                            <ErrorMessage message={errors.password} />
-                            )
-                          : null}
-                        <Button
-                            style={{ alignSelf: 'center' }}
-                            labelStyle={{ fontSize: 16, fontWeight: 'normal' }}
-                            rippleColor="transparent"
-                            mode="text"
-                            onPress={() => { navigate('ForgotPassword') }}
-                        >
-                            Esqueci minha senha
-                        </Button>
-                    </View>
-                    <Button
-                        mode="contained"
-                        disabled={typeof errors.email === 'string' || typeof errors.password === 'string'}
-                        onPress={() => { handleSubmit().catch(() => {}) }}>
-                        Login
-                    </Button>
-                </View>
-            </View>
+            <Button
+              style={{ alignSelf: 'center' }}
+              labelStyle={{ fontSize: 16, fontWeight: 'normal' }}
+              rippleColor="transparent"
+              mode="text"
+              onPress={() => { navigate('ForgotPassword') }}
+            >
+              Esqueci minha senha
+            </Button>
+          </View>
+          <Button
+            mode="contained"
+            disabled={typeof errors.email === 'string' || typeof errors.password === 'string'}
+            onPress={handleSubmit(submitLogin)}
+          >
+            Login
+          </Button>
         </View>
+      </View>
+    </View>
   )
 })
