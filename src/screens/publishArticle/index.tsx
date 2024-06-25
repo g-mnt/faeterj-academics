@@ -1,12 +1,27 @@
 import React, { useState } from 'react'
-import { KeyboardAvoidingView, Pressable, ScrollView, StyleSheet, View } from 'react-native'
-import { Button, Icon, Text, TextInput, useTheme } from 'react-native-paper'
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native'
+import { Button, Icon, Text, useTheme } from 'react-native-paper'
 import { withAuthLayout } from 'src/HOC/withAuthLayout'
 import * as DocumentPicker from 'expo-document-picker'
+import { Controller, useForm } from 'react-hook-form'
+import { object, string } from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { Input } from 'src/components/Input'
+
+type PublishArticleForm = {
+  title: string
+  description: string
+}
+
+const formSchema = object({
+  title: string().required('O título é obrigatório'),
+  description: string().required('A descrição é obrigatória')
+})
+
 export const PublishArticleScreen = withAuthLayout(() => {
-  const {colors} = useTheme()
-  const [title, setTitle] = useState('')
-  const [description, setDescription] = useState('')
+  const { colors } = useTheme()
+  const { control, handleSubmit, formState: { errors } } = useForm<PublishArticleForm>({ resolver: yupResolver(formSchema) })
+
   const [uploadedFile, setUploadedFile] = useState<DocumentPicker.DocumentPickerAsset | null>(null)
 
   async function handlePickFile (): Promise<void> {
@@ -16,37 +31,53 @@ export const PublishArticleScreen = withAuthLayout(() => {
     }
   }
 
+  async function submitArticle (data: PublishArticleForm): Promise<void> {
+    console.log(data)
+  }
+
   return (
         <View style={{ flex: 1 }}>
           <ScrollView
             contentContainerStyle={styles.mainContainer}
-            keyboardShouldPersistTaps='always'
+            keyboardShouldPersistTaps="always"
             automaticallyAdjustKeyboardInsets
           >
             <View style={styles.formUpload}>
                 <Text style={styles.inputLabel}>Titulo</Text>
-                <TextInput
-                    style={styles.input}
-                    theme={{ roundness: 20 }}
-                    mode="outlined"
-                    testID="email-input"
-                    placeholder="Titulo"
-                    value={title}
-                    onChangeText={setTitle}
-                    onBlur={() => { }}
-                    // left={<TextInput.Icon icon="email-outline" />}
+                <Controller
+                  control={control}
+                  name='title'
+                  render={ ({ field: { onChange, value } }) => (
+                    <Input
+                      containerStyle={styles.input}
+                      theme={{ roundness: 20 }}
+                      mode="outlined"
+                      testID="title-input"
+                      placeholder="Titulo"
+                      value={value}
+                      onChangeText={onChange}
+                      error={errors.title !== undefined}
+                      errorMessage={errors.title?.message}
+                    />
+                  )}
                 />
                 <Text style={styles.inputLabel}>Descrição</Text>
-                <TextInput
-                    style={styles.input}
-                    theme={{ roundness: 20 }}
-                    mode="outlined"
-                    testID="email-input"
-                    placeholder="Descrição"
-                    value={description}
-                    onChangeText={setDescription}
-                    onBlur={() => { }}
-                    // left={<TextInput.Icon icon="email-outline" />}
+                <Controller
+                  control={control}
+                  name='description'
+                  render={ ({ field: { onChange, value } }) => (
+                    <Input
+                      containerStyle={styles.input}
+                      theme={{ roundness: 20 }}
+                      mode="outlined"
+                      testID="description-input"
+                      placeholder="Descrição"
+                      value={value}
+                      onChangeText={onChange}
+                      error={errors.description !== undefined}
+                      errorMessage={errors.description?.message}
+                    />
+                  )}
                 />
                 <Text style={styles.inputLabel}>PDF Upload</Text>
                 <Pressable
@@ -63,7 +94,7 @@ export const PublishArticleScreen = withAuthLayout(() => {
             </View>
             <Button
                 mode="contained"
-                onPress={() => { }}>
+                onPress={handleSubmit(submitArticle)}>
                 Publicar Artigo
             </Button>
           </ScrollView>
