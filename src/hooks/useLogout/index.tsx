@@ -1,13 +1,14 @@
-import {removeToken} from "src/services/storage";
-import {useUserStore} from "src/store/user";
+import { removeToken } from 'src/services/storage'
+import { useUserStore } from 'src/store/user'
+import { type UseLogoutData } from './types'
 
-export const useLogout = () => {
-    const {unsetUser} = useUserStore();
-    const logout = () => {
-        removeToken().catch(() => {});
-        unsetUser();
-    }
-    return {
-        logout
-    }
+export function useLogout (): UseLogoutData {
+  const { unsetUser } = useUserStore()
+  const logout = (): void => {
+    removeToken().catch(() => {})
+    unsetUser()
+  }
+  return {
+    logout
+  }
 }

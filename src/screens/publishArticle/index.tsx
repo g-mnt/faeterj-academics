@@ -7,6 +7,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { object, string } from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Input } from 'src/components/Input'
+import { useToast } from 'src/hooks/useToast'
 
 type PublishArticleForm = {
   title: string
@@ -21,8 +22,8 @@ const formSchema = object({
 export const PublishArticleScreen = withAuthLayout(() => {
   const { colors } = useTheme()
   const { control, handleSubmit, formState: { errors } } = useForm<PublishArticleForm>({ resolver: yupResolver(formSchema) })
-
   const [uploadedFile, setUploadedFile] = useState<DocumentPicker.DocumentPickerAsset | null>(null)
+  const { successToast } = useToast()
 
   async function handlePickFile (): Promise<void> {
     const result = await DocumentPicker.getDocumentAsync({ type: 'application/pdf' })
@@ -32,7 +33,7 @@ export const PublishArticleScreen = withAuthLayout(() => {
   }
 
   async function submitArticle (data: PublishArticleForm): Promise<void> {
-    console.log(data)
+    successToast('Artigo criado com sucesso')
   }
 
   return (

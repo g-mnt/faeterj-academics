@@ -26,12 +26,9 @@ export const LoginScreen = withGuestLayout(() => {
   const [hiddenPassword, setHiddenPassword] = useState(true)
 
   const submitLogin = async (form: LoginForm): Promise<void> => {
-    try {
-      const data = await fetchLogin(form)
-      if (data !== null) {
-        authenticate(data.user, data.token)
-      }
-    } catch (e) {
+    const data = await fetchLogin(form)
+    if (data !== null) {
+      authenticate(data.user, data.token)
     }
   }
   return (
@@ -56,6 +53,7 @@ export const LoginScreen = withGuestLayout(() => {
                   onChangeText={onChange}
                   error={errors.email !== undefined}
                   errorMessage={errors.email?.message}
+                  left={<TextInput.Icon icon="email-outline" />}
                 />
               )}
             />
