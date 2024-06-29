@@ -21,7 +21,7 @@ export const Navigations: React.FC = () => {
 
     if (token !== null) {
       setApiToken(token)
-      const data = await fetchSelf()
+      const { data } = await fetchSelf()
       if (data !== null) {
         setUser(data)
       }

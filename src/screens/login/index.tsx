@@ -26,7 +26,7 @@ export const LoginScreen = withGuestLayout(() => {
   const [hiddenPassword, setHiddenPassword] = useState(true)
 
   const submitLogin = async (form: LoginForm): Promise<void> => {
-    const data = await fetchLogin(form)
+    const { data } = await fetchLogin(form)
     if (data !== null) {
       authenticate(data.user, data.token)
     }

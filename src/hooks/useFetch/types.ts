@@ -7,10 +7,13 @@ export type FetchApiProps<T> = {
   showErrorToast?: boolean
 }
 
-export type FetchApiReturn<P, T> = [{
+export type FetchApiStateReturn<T> = {
   data: T | null
   error: AxiosError | null
   isLoading: boolean
-},
-(v?: P) => Promise<T | null>
+}
+
+export type FetchApiReturn<P, T> = [
+  state: FetchApiStateReturn<T>,
+  (v?: P) => Promise<FetchApiStateReturn<T>>
 ]

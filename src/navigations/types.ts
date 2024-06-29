@@ -10,3 +10,4 @@ export type ApplicationStackParamList = {
 }
 
 export type GuestStackScreenProps = StackNavigationProp<GuestStackParamList>
+export type ApplicationStackScreenProps = StackNavigationProp<ApplicationStackParamList>

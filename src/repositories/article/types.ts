@@ -1,10 +1,11 @@
-import {PaginatedRequestProps, PaginatedResponse} from "types/request";
-import {Article} from "types/models/article";
+import { type JsonResponse, type PaginatedRequestProps, type PaginatedResponse } from 'types/request'
+import { type Article } from 'types/models/article'
 
 export type IndexParams = {
-    search?: string
+  search?: string
 } & PaginatedRequestProps
 
 export type ArticleRepositoryData = {
-    index: (params: IndexParams) => Promise<PaginatedResponse<Article>>
+  index: (params: IndexParams) => Promise<PaginatedResponse<Article>>
+  post: (form: FormData) => Promise<JsonResponse>
 }

@@ -13,7 +13,7 @@ export const useRoutes = (): UseRoutesData => {
   {
     name: 'PublishArticle',
     displayName: 'Publicar Artigo',
-    icon: 'home',
+    icon: 'pencil-outline',
     component: PublishArticleScreen,
     hidden: false
   }
