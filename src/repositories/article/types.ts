@@ -8,4 +8,5 @@ export type IndexParams = {
 export type ArticleRepositoryData = {
   index: (params: IndexParams) => Promise<PaginatedResponse<Article>>
   post: (form: FormData) => Promise<JsonResponse>
+  favorites: (params: IndexParams) => Promise<PaginatedResponse<Article>>
 }

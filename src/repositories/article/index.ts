@@ -11,5 +11,9 @@ export const ArticleRepository: ArticleRepositoryData = {
   post: async (form) => {
     const { data } = await api.postForm<JsonResponse>('articles?method=PUT', form)
     return data
+  },
+  favorites: async (params) => {
+    const { data } = await api.get<PaginatedResponse<Article>>('articles/favorites', { params })
+    return data
   }
 }
