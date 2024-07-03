@@ -1,14 +1,8 @@
-import {AuthorProps} from "components/Author/types";
-import {ViewStyle} from "react-native";
+import { type ViewStyle } from 'react-native'
+import { type Article } from 'src/types/models/article'
 
 export type ArticleCardProps = {
-    article: ArticleProps
-    style?: ViewStyle
-}
-
-export type ArticleProps = {
-    title: string;
-    description: string;
-    author: AuthorProps;
-    favorite: boolean;
+  article: Article
+  style?: ViewStyle
+  onPress?: (article: Article) => void
 }
