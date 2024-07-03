@@ -2,7 +2,7 @@ import React, { useState, type ReactNode } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { withAuthLayout } from 'src/HOC/withAuthLayout'
 import { type ViewArticleScreenProps } from './types'
-import { IconButton, Text, useTheme } from 'react-native-paper'
+import { IconButton, Text } from 'react-native-paper'
 import { useNavigation } from '@react-navigation/native'
 import { type ApplicationStackScreenProps } from 'src/navigations/types'
 import Pdf from 'react-native-pdf'
@@ -13,7 +13,6 @@ import { useToast } from 'src/hooks/useToast'
 export const ViewArticleScreen = withAuthLayout(({ route }: ViewArticleScreenProps): ReactNode => {
   const [totalPages, setTotalPages] = useState(0)
   const [currentPage, setCurrentPage] = useState(0)
-  const { colors } = useTheme()
   const { navigate } = useNavigation<ApplicationStackScreenProps>()
   const { successToast, errorToast } = useToast()
   const article = route.params.article
@@ -44,7 +43,7 @@ export const ViewArticleScreen = withAuthLayout(({ route }: ViewArticleScreenPro
             <Text style={styles.articlePage}>{`Page: ${currentPage}/${totalPages}`}</Text>
             <View style={styles.commandsContainer}>
                 <IconButton icon={'tray-arrow-down'} iconColor='white' onPress={initiateDownload}/>
-                <IconButton icon={'star'} iconColor={!article.favorite ? colors.primary : 'white'} onPress={() => { console.log('start download') }}/>
+                <IconButton icon={article.favorite ? 'star' : 'star-outline'} iconColor={'white'} onPress={() => { console.log('favorite') }}/>
             </View>
         </View>
         <Pdf
