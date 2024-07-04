@@ -29,7 +29,7 @@ export function useInfinityScroll<P extends PaginatedRequestProps, T> (
 
       if (data !== null) {
         meta.current = data.meta
-        setData(prev => [...(prev ?? []), ...data.data])
+        setData(prev => page.current === 1 ? data.data : [...(prev ?? []), ...data.data])
       }
     }
   }
