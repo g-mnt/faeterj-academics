@@ -10,4 +10,5 @@ export type ArticleRepositoryData = {
   post: (form: FormData) => Promise<JsonResponse>
   favorites: (params: IndexParams) => Promise<PaginatedResponse<Article>>
   toggleFavorite: (article: Article) => Promise<JsonDataResponse<Article>>
+  self: (params: IndexParams) => Promise<PaginatedResponse<Article>>
 }

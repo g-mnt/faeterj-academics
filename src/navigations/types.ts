@@ -9,7 +9,8 @@ export type ApplicationStackParamList = {
   Home: undefined
   PublishArticle: undefined
   ViewArticle: { article: Article }
-  FavortieArticles: undefined
+  FavoriteArticles: undefined
+  SelfArticles: undefined
 }
 
 export type GuestStackScreenProps = StackNavigationProp<GuestStackParamList>

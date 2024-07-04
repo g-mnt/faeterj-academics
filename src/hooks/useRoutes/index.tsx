@@ -2,7 +2,8 @@ import { HomeScreen } from 'screens/home'
 import { type RouteData, type UseRoutesData } from './types'
 import { PublishArticleScreen } from 'src/screens/publishArticle'
 import { ViewArticleScreen } from 'src/screens/viewArticle'
-import { favortieArticlesScreen } from 'src/screens/favoriteArticles'
+import { FavoriteArticlesScreen } from 'src/screens/favoriteArticles'
+import { SelfArticleScreen } from 'src/screens/selfArticle'
 
 export const useRoutes = (): UseRoutesData => {
   const routes: RouteData[] = [{
@@ -20,10 +21,17 @@ export const useRoutes = (): UseRoutesData => {
     hidden: false
   },
   {
-    name: 'FavortieArticles',
+    name: 'FavoriteArticles',
     displayName: 'Artigos Favoritos',
     icon: 'star',
-    component: favortieArticlesScreen,
+    component: FavoriteArticlesScreen,
+    hidden: false
+  },
+  {
+    name: 'SelfArticles',
+    displayName: 'Meus Artigos',
+    icon: 'text-box-multiple-outline',
+    component: SelfArticleScreen,
     hidden: false
   },
   {
