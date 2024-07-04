@@ -18,3 +18,8 @@ export type PaginatedResponse<T> = {
 export type JsonResponse = {
   message: string
 }
+
+export type JsonDataResponse<T> = {
+  data: T
+  message: string
+}

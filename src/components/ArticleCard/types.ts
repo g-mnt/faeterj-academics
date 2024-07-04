@@ -5,4 +5,5 @@ export type ArticleCardProps = {
   article: Article
   style?: ViewStyle
   onPress?: (article: Article) => void
+  onPressStar?: (article: Article) => void
 }

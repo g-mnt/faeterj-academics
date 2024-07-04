@@ -4,7 +4,7 @@ import { Author } from 'components/Author'
 import { type ArticleCardProps } from 'components/ArticleCard/types'
 import React, { type ReactNode } from 'react'
 
-export const ArticleCard = ({ article, onPress, ...props }: ArticleCardProps): ReactNode => {
+export const ArticleCard = ({ article, onPress, onPressStar, ...props }: ArticleCardProps): ReactNode => {
   const { colors } = useTheme()
   return (
     <Card theme={{ roundness: 6 }} {...props}>
@@ -16,7 +16,11 @@ export const ArticleCard = ({ article, onPress, ...props }: ArticleCardProps): R
         <Card.Content>
             <View style={styles.articleTitleContainer}>
               <Text style={styles.articleTitle}>{article.title}</Text>
-              <Pressable onPress={() => { console.log('implement favorite funcitonality') }}>
+              <Pressable onPress={() => {
+                if (onPressStar !== undefined) {
+                  onPressStar(article)
+                }
+              }}>
                 <Icon source={'star'} size={25} color={article.favorite ? colors.primary : colors.backdrop } />
               </Pressable>
             </View>
