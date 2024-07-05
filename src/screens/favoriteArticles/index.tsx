@@ -35,4 +35,4 @@ export const FavoriteArticlesScreen = withAuthLayout((): ReactNode => {
         handleFavoriteChange={handleFavoriteChanged}
       />
   )
-})
+}, { pageTitle: 'Artigos Favoritos' })

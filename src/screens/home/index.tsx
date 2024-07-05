@@ -22,4 +22,4 @@ export const HomeScreen = withAuthLayout(() => {
       isLoading={isLoading}
     />
   )
-})
+}, { pageTitle: 'Pagina Inicial' })

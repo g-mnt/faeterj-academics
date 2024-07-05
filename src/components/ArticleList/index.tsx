@@ -11,7 +11,7 @@ import { useFetch } from 'src/hooks/useFetch'
 import { ArticleRepository } from 'src/repositories/article'
 import { useToast } from 'src/hooks/useToast'
 
-export function ArticleList ({ data, isLoading, loadMore, handleFavoriteChange }: ArticleListProps): ReactNode {
+export function ArticleList ({ data, isLoading, cardType, loadMore, handleFavoriteChange }: ArticleListProps): ReactNode {
   const [articles, setArticles] = useState([...data])
   const { navigate } = useNavigation<ApplicationStackScreenProps>()
   const [{ isLoading: loadingFavorite }, fetchToggleFavorite] = useFetch(ArticleRepository.toggleFavorite)
@@ -49,6 +49,7 @@ export function ArticleList ({ data, isLoading, loadMore, handleFavoriteChange }
                     article={item}
                     onPress={handleArticlePress}
                     onPressStar={!loadingFavorite ? handleFavorite : undefined}
+                    type={cardType}
                 />
             )}
             ListEmptyComponent={ isLoading === false ? <NoDataCard message={'Nenhum artigo encontrado'} /> : null }

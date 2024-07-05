@@ -1,10 +1,11 @@
-import { Card, Icon, Text, useTheme } from 'react-native-paper'
-import { View, StyleSheet, Pressable, TouchableOpacity } from 'react-native'
+import { Card, IconButton, Text, useTheme } from 'react-native-paper'
+import { View, StyleSheet, TouchableOpacity } from 'react-native'
 import { Author } from 'components/Author'
 import { type ArticleCardProps } from 'components/ArticleCard/types'
 import React, { type ReactNode } from 'react'
+import { ArticleStatus } from '../ArticleStatus'
 
-export const ArticleCard = ({ article, onPress, onPressStar, ...props }: ArticleCardProps): ReactNode => {
+export const ArticleCard = ({ article, type = 'favorite', onPress, onPressStar, ...props }: ArticleCardProps): ReactNode => {
   const { colors } = useTheme()
   return (
     <Card theme={{ roundness: 6 }} {...props}>
@@ -14,18 +15,25 @@ export const ArticleCard = ({ article, onPress, onPressStar, ...props }: Article
         }
       }}>
         <Card.Content>
-            <View style={styles.articleTitleContainer}>
-              <Text style={styles.articleTitle}>{article.title}</Text>
-              <Pressable onPress={() => {
-                if (onPressStar !== undefined) {
-                  onPressStar(article)
-                }
-              }}>
-                <Icon source={'star'} size={25} color={article.favorite ? colors.primary : colors.backdrop } />
-              </Pressable>
-            </View>
-            <Text numberOfLines={2} style={styles.articleDescription}>{article.description}</Text>
-            <Author author={article.author} />
+          <View style={styles.articleTitleContainer}>
+            <Text style={styles.articleTitle}>{article.title}</Text>
+            {type === 'favorite'
+              ? <IconButton
+                onPress={() => {
+                  if (onPressStar !== undefined) {
+                    onPressStar(article)
+                  }
+                }}
+                icon={'star'}
+                size={25}
+                iconColor={article.favorite ? colors.primary : colors.backdrop }
+              />
+              : <ArticleStatus status={article.status} />
+          }
+
+          </View>
+          <Text numberOfLines={2} style={styles.articleDescription}>{article.description}</Text>
+          <Author author={article.author} />
         </Card.Content>
       </TouchableOpacity>
     </Card>
@@ -34,13 +42,13 @@ export const ArticleCard = ({ article, onPress, onPressStar, ...props }: Article
 
 const styles = StyleSheet.create({
   touchableContainer: {
-    paddingVertical: 20
+    paddingTop: 10,
+    paddingBottom: 20
   },
   articleTitleContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 10
+    alignItems: 'center'
   },
   articleTitle: {
     fontSize: 18,
