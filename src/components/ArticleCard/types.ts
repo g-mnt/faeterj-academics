@@ -1,7 +1,7 @@
 import { type ViewStyle } from 'react-native'
 import { type Article } from 'src/types/models/article'
 
-export type ArticleCardType = 'favorite' | 'approval'
+export type ArticleCardType = 'none' | 'favorite' | 'approval'
 
 export type ArticleCardProps = {
   article: Article

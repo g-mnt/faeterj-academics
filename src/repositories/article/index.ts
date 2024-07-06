@@ -8,8 +8,16 @@ export const ArticleRepository: ArticleRepositoryData = {
     const { data } = await api.get<PaginatedResponse<Article>>('articles', { params })
     return data
   },
+  pending: async (params) => {
+    const { data } = await api.get<PaginatedResponse<Article>>('articles/pending', { params })
+    return data
+  },
   post: async (form) => {
     const { data } = await api.postForm<JsonResponse>('articles?method=PUT', form)
+    return data
+  },
+  update: async ({ id, ...params }) => {
+    const { data } = await api.put<JsonDataResponse<Article>>(`articles/${id}`, params)
     return data
   },
   favorites: async (params) => {

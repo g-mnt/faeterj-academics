@@ -1,9 +1,10 @@
-import { Card, IconButton, Text, useTheme } from 'react-native-paper'
+import { Card, Text, useTheme } from 'react-native-paper'
 import { View, StyleSheet, TouchableOpacity } from 'react-native'
 import { Author } from 'components/Author'
 import { type ArticleCardProps } from 'components/ArticleCard/types'
 import React, { type ReactNode } from 'react'
 import { ArticleStatus } from '../ArticleStatus'
+import { IconButton } from '../IconButton'
 
 export const ArticleCard = ({ article, type = 'favorite', onPress, onPressStar, ...props }: ArticleCardProps): ReactNode => {
   const { colors } = useTheme()
@@ -42,8 +43,7 @@ export const ArticleCard = ({ article, type = 'favorite', onPress, onPressStar, 
 
 const styles = StyleSheet.create({
   touchableContainer: {
-    paddingTop: 10,
-    paddingBottom: 20
+    paddingVertical: 20
   },
   articleTitleContainer: {
     flexDirection: 'row',

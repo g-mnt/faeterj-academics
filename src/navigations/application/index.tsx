@@ -10,7 +10,11 @@ export const ApplicationNavigation: React.FC = () => {
   const { routes } = useRoutes()
   return (
         <NavigationContainer>
-            <Drawer.Navigator screenOptions={{ headerShown: false, drawerStyle: { width: '100%' } }} drawerContent={DrawerContent}>
+            <Drawer.Navigator
+                backBehavior='history'
+                screenOptions={{ headerShown: false, drawerStyle: { width: '100%' } }}
+                drawerContent={DrawerContent}
+            >
                 {routes.map((route) => (
                     <Drawer.Screen key={route.name} name={route.name} component={route.component} />
                 ))}
