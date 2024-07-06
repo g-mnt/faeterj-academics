@@ -1,3 +1,4 @@
+import { type DrawerNavigationProp } from '@react-navigation/drawer'
 import { type StackNavigationProp } from '@react-navigation/stack'
 import { type Article } from 'src/types/models/article'
 export type GuestStackParamList = {
@@ -11,7 +12,8 @@ export type ApplicationStackParamList = {
   ViewArticle: { article: Article }
   FavoriteArticles: undefined
   SelfArticles: undefined
+  ArticlesValidation: undefined
 }
 
 export type GuestStackScreenProps = StackNavigationProp<GuestStackParamList>
-export type ApplicationStackScreenProps = StackNavigationProp<ApplicationStackParamList>
+export type ApplicationStackScreenProps = DrawerNavigationProp<ApplicationStackParamList>
