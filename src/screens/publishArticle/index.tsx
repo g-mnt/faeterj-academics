@@ -135,7 +135,7 @@ export const PublishArticleScreen = withAuthLayout(() => {
       </ScrollView>
     </View>
   )
-})
+}, { pageTitle: 'Publicar Artigo' })
 
 const styles = StyleSheet.create({
   mainContainer: {

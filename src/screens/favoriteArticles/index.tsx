@@ -6,7 +6,7 @@ import { useInfinityScroll } from 'src/hooks/useInfinityScroll'
 import { ArticleRepository } from 'src/repositories/article'
 import { type Article } from 'src/types/models/article'
 
-export const favortieArticlesScreen = withAuthLayout((): ReactNode => {
+export const FavoriteArticlesScreen = withAuthLayout((): ReactNode => {
   const { data, isLoading, loadMore, refresh } = useInfinityScroll(ArticleRepository.favorites, { params: {} })
   const [articles, setArticles] = useState<Article[]>([])
   const focused = useIsFocused()
@@ -35,4 +35,4 @@ export const favortieArticlesScreen = withAuthLayout((): ReactNode => {
         handleFavoriteChange={handleFavoriteChanged}
       />
   )
-})
+}, { pageTitle: 'Artigos Favoritos' })

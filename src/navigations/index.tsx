@@ -36,8 +36,8 @@ export const Navigations: React.FC = () => {
 
   if (user === null && isLoading) {
     return <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <ActivityIndicator size="large" color={colors.primary} />
-         </View>
+      <ActivityIndicator size="large" color={colors.primary} />
+    </View>
   }
 
   return user === null ? <GuestNavigation /> : <ApplicationNavigation />

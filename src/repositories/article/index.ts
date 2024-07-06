@@ -16,6 +16,10 @@ export const ArticleRepository: ArticleRepositoryData = {
     const { data } = await api.get<PaginatedResponse<Article>>('articles/favorites', { params })
     return data
   },
+  self: async (params) => {
+    const { data } = await api.get<PaginatedResponse<Article>>('articles/self', { params })
+    return data
+  },
   toggleFavorite: async (article) => {
     const { data } = await api.get<JsonDataResponse<Article>>(`articles/toggle-favorite/${article.id}`)
     return data
