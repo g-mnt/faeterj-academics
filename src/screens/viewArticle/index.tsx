@@ -14,11 +14,15 @@ import { useUserStore } from 'src/store/user'
 import { UserRole } from 'src/types/models/user'
 import { useFetch } from 'src/hooks/useFetch'
 import { ArticleRepository } from 'src/repositories/article'
+import { Dialog } from 'src/components/Dialog'
 
 export const ViewArticleScreen = withAuthLayout(({ route }: ViewArticleScreenProps): ReactNode => {
   const [user] = useUserStore((state) => [state.user])
   const [totalPages, setTotalPages] = useState(0)
   const [currentPage, setCurrentPage] = useState(0)
+  const [removeConfirmation, setRemoveConfirmation] = useState(false)
+  const [approveConfirmation, setApproveConfirmation] = useState(false)
+  const [rejectConfirmation, setRejectConfirmation] = useState(false)
   const { goBack } = useNavigation<ApplicationStackScreenProps>()
   const { successToast, errorToast } = useToast()
   const [, fetchUpdate] = useFetch(ArticleRepository.update)
@@ -43,6 +47,14 @@ export const ViewArticleScreen = withAuthLayout(({ route }: ViewArticleScreenPro
 
   async function handleStatus (status: ArticleStatuses): Promise<void> {
     const { data, error } = await fetchUpdate({ id: article.id, status })
+    if (status === ArticleStatuses.Approved) {
+      setApproveConfirmation(false)
+    }
+
+    if (status === ArticleStatuses.Rejected) {
+      setRejectConfirmation(false)
+    }
+
     if (error === null && data !== null) {
       successToast(data.message)
       goBack()
@@ -51,6 +63,7 @@ export const ViewArticleScreen = withAuthLayout(({ route }: ViewArticleScreenPro
 
   async function handleDelete (): Promise<void> {
     const { data, error } = await fetchDelete(article)
+    setRemoveConfirmation(false)
     if (error === null && data !== null) {
       successToast(data.message)
       goBack()
@@ -59,6 +72,30 @@ export const ViewArticleScreen = withAuthLayout(({ route }: ViewArticleScreenPro
 
   return (
     <View style={{ flex: 1 }}>
+      <Dialog
+        visible={removeConfirmation}
+        description='Ao confirmar o artigo será removido permanentemente'
+        onDismiss={() => { setRemoveConfirmation(false) }}
+        onCancelPress={() => { setRemoveConfirmation(false) }}
+        onConfirmationPress={handleDelete}
+      />
+
+      <Dialog
+        visible={approveConfirmation}
+        description='Ao confirmar o artigo ficará público para todos os alunos.'
+        onDismiss={() => { setApproveConfirmation(false) }}
+        onCancelPress={() => { setApproveConfirmation(false) }}
+        onConfirmationPress={() => { handleStatus(ArticleStatuses.Approved).catch(() => {}) }}
+      />
+
+      <Dialog
+        visible={rejectConfirmation}
+        description='Ao confirmar o artigo não será publicado para os alunos.'
+        onDismiss={() => { setRejectConfirmation(false) }}
+        onCancelPress={() => { setRejectConfirmation(false) }}
+        onConfirmationPress={() => { handleStatus(ArticleStatuses.Rejected).catch(() => {}) }}
+      />
+
       <View style={styles.headerContainer}>
         <IconButton icon="arrow-left" size={30} onPress={goBack} />
         <Text style={styles.articleTitle}>{article.title}</Text>
@@ -83,20 +120,20 @@ export const ViewArticleScreen = withAuthLayout(({ route }: ViewArticleScreenPro
         }}
         style={{ flex: 1 }}
       />
-      {article.status === ArticleStatuses.Pending && user?.role === UserRole.Professor
+      {article.status === ArticleStatuses.Pending && user?.role === UserRole.Student
         ? (
           <View style={styles.approvalContainer}>
             <Button
               style={styles.approvalButtons}
               mode="outlined"
-              onPress={() => { handleStatus(ArticleStatuses.Rejected).catch(() => {}) }}
+              onPress={() => { setRejectConfirmation(true) }}
             >
               Rejeitar
             </Button>
             <Button
               style={styles.approvalButtons}
               mode="contained"
-              onPress={() => { handleStatus(ArticleStatuses.Approved).catch(() => {}) }}
+              onPress={() => { setApproveConfirmation(true) }}
               textColor='white'
             >
               Aprovar
@@ -105,7 +142,7 @@ export const ViewArticleScreen = withAuthLayout(({ route }: ViewArticleScreenPro
           )
         : null}
 
-      {user?.role === UserRole.Professor || user?.id === article.author.id
+      {user?.role === UserRole.Professor || user?.id !== article.author.id
         ? (
           <View style={styles.approvalContainer}>
             <Button
@@ -113,7 +150,7 @@ export const ViewArticleScreen = withAuthLayout(({ route }: ViewArticleScreenPro
               buttonColor={colors.error}
               textColor="white"
               mode="outlined"
-              onPress={() => { handleDelete().catch(() => {}) }}
+              onPress={() => { setRemoveConfirmation(true) }}
             >
               Deletar
             </Button>

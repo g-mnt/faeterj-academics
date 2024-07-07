@@ -32,7 +32,7 @@ export const useFetch = <P, T>(
           logout()
           errorToast('Login expirado!')
         } else if (showErrorToast === true) {
-          errorToast(error.message)
+          errorToast(error.response?.data.message as string ?? error.message)
         }
       }
 
