@@ -24,12 +24,12 @@ export function useInfinityScroll<P extends PaginatedRequestProps, T> (
         return
       }
 
-      const { data } = await fetchRequest({ ...params.params, page: page.current })
-      page.current++
+      const { data, error } = await fetchRequest({ ...params.params, page: page.current })
 
-      if (data !== null) {
+      if (error !== null && data !== null) {
         meta.current = data.meta
         setData(prev => page.current === 1 ? data.data : [...(prev ?? []), ...data.data])
+        page.current++
       }
     }
   }

@@ -38,24 +38,24 @@ export function ArticleList ({ data, isLoading, cardType, loadMore, handleFavori
     }
   }
   return (
-        <View>
-            <FlatList
-            data={articles}
-            onEndReached={() => { loadMore().catch(() => {}) }}
-            renderItem={({ item, index }) => (
-                <ArticleCard
-                    key={index}
-                    style={styles.article}
-                    article={item}
-                    onPress={handleArticlePress}
-                    onPressStar={!loadingFavorite ? handleFavorite : undefined}
-                    type={cardType}
-                />
-            )}
-            ListEmptyComponent={ isLoading === false ? <NoDataCard message={'Nenhum artigo encontrado'} /> : null }
-            ListFooterComponent={isLoading === true ? <ActivityIndicator /> : null}
-        />
-      </View>
+    <View>
+      <FlatList
+        data={articles}
+        onEndReached={() => { loadMore().catch(() => {}) }}
+        renderItem={({ item, index }) => (
+          <ArticleCard
+            key={index}
+            style={styles.article}
+            article={item}
+            onPress={handleArticlePress}
+            onPressStar={!loadingFavorite ? handleFavorite : undefined}
+            type={cardType}
+          />
+        )}
+        ListEmptyComponent={ isLoading === false ? <NoDataCard message={'Nenhum artigo encontrado'} /> : null }
+        ListFooterComponent={isLoading === true ? <ActivityIndicator /> : null}
+      />
+    </View>
   )
 }
 

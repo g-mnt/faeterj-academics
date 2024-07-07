@@ -20,6 +20,10 @@ export const ArticleRepository: ArticleRepositoryData = {
     const { data } = await api.put<JsonDataResponse<Article>>(`articles/${id}`, params)
     return data
   },
+  delete: async ({ id }) => {
+    const { data } = await api.delete<JsonResponse>(`articles/${id}`)
+    return data
+  },
   favorites: async (params) => {
     const { data } = await api.get<PaginatedResponse<Article>>('articles/favorites', { params })
     return data

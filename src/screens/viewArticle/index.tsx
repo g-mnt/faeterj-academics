@@ -2,7 +2,7 @@ import React, { useState, type ReactNode } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { withAuthLayout } from 'src/HOC/withAuthLayout'
 import { type ViewArticleScreenProps } from './types'
-import { Button, IconButton, Text } from 'react-native-paper'
+import { Button, IconButton, Text, useTheme } from 'react-native-paper'
 import { useNavigation } from '@react-navigation/native'
 import { type ApplicationStackScreenProps } from 'src/navigations/types'
 import Pdf from 'react-native-pdf'
@@ -22,6 +22,8 @@ export const ViewArticleScreen = withAuthLayout(({ route }: ViewArticleScreenPro
   const { goBack } = useNavigation<ApplicationStackScreenProps>()
   const { successToast, errorToast } = useToast()
   const [, fetchUpdate] = useFetch(ArticleRepository.update)
+  const [, fetchDelete] = useFetch(ArticleRepository.delete)
+  const { colors } = useTheme()
   const article = route.params.article
 
   async function initiateDownload (): Promise<void> {
@@ -42,7 +44,14 @@ export const ViewArticleScreen = withAuthLayout(({ route }: ViewArticleScreenPro
   async function handleStatus (status: ArticleStatuses): Promise<void> {
     const { data, error } = await fetchUpdate({ id: article.id, status })
     if (error === null && data !== null) {
-      console.log(data)
+      successToast(data.message)
+      goBack()
+    }
+  }
+
+  async function handleDelete (): Promise<void> {
+    const { data, error } = await fetchDelete(article)
+    if (error === null && data !== null) {
       successToast(data.message)
       goBack()
     }
@@ -82,14 +91,31 @@ export const ViewArticleScreen = withAuthLayout(({ route }: ViewArticleScreenPro
               mode="outlined"
               onPress={() => { handleStatus(ArticleStatuses.Rejected).catch(() => {}) }}
             >
-              <Text>Reject</Text>
+              Rejeitar
             </Button>
             <Button
               style={styles.approvalButtons}
               mode="contained"
               onPress={() => { handleStatus(ArticleStatuses.Approved).catch(() => {}) }}
+              textColor='white'
             >
-              <Text style={styles.approveButtonText}>Approve</Text>
+              Aprovar
+            </Button>
+          </View>
+          )
+        : null}
+
+      {user?.role === UserRole.Professor || user?.id === article.author.id
+        ? (
+          <View style={styles.approvalContainer}>
+            <Button
+              style={styles.approvalButtons}
+              buttonColor={colors.error}
+              textColor="white"
+              mode="outlined"
+              onPress={() => { handleDelete().catch(() => {}) }}
+            >
+              Deletar
             </Button>
           </View>
           )
@@ -129,12 +155,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     columnGap: 5,
-    paddingTop: 10
+    paddingTop: 20
   },
   approvalButtons: {
     flex: 1
-  },
-  approveButtonText: {
-    color: 'white'
   }
 })
