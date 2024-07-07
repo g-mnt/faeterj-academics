@@ -120,7 +120,7 @@ export const ViewArticleScreen = withAuthLayout(({ route }: ViewArticleScreenPro
         }}
         style={{ flex: 1 }}
       />
-      {article.status === ArticleStatuses.Pending && user?.role === UserRole.Student
+      {article.status === ArticleStatuses.Pending && user?.role === UserRole.Professor
         ? (
           <View style={styles.approvalContainer}>
             <Button
@@ -142,7 +142,7 @@ export const ViewArticleScreen = withAuthLayout(({ route }: ViewArticleScreenPro
           )
         : null}
 
-      {user?.role === UserRole.Professor || user?.id !== article.author.id
+      {user?.role === UserRole.Professor || user?.id === article.author.id
         ? (
           <View style={styles.approvalContainer}>
             <Button
