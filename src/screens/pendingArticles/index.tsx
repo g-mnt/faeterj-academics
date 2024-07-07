@@ -16,6 +16,6 @@ export const PendingArticlesScreen = withAuthLayout((): ReactNode => {
   }, [focused])
 
   return (
-        <ArticleList data={data} loadMore={loadMore} isLoading={isLoading} />
+    <ArticleList data={data} loadMore={loadMore} isLoading={isLoading} cardType='none' />
   )
 }, { pageTitle: 'Validar Artigos' })

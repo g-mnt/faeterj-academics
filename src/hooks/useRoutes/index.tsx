@@ -5,8 +5,11 @@ import { ViewArticleScreen } from 'src/screens/viewArticle'
 import { FavoriteArticlesScreen } from 'src/screens/favoriteArticles'
 import { SelfArticleScreen } from 'src/screens/selfArticle'
 import { PendingArticlesScreen } from 'src/screens/pendingArticles'
+import { useUserStore } from 'src/store/user'
+import { UserRole } from 'src/types/models/user'
 
 export const useRoutes = (): UseRoutesData => {
+  const user = useUserStore((state) => state.user)
   const routes: RouteData[] = [
     {
       name: 'Home',
@@ -41,7 +44,7 @@ export const useRoutes = (): UseRoutesData => {
       displayName: 'Validação de Artigos',
       icon: 'text-box-check-outline',
       component: PendingArticlesScreen,
-      hidden: false
+      hidden: user?.role !== UserRole.Professor
     },
     {
       name: 'ViewArticle',

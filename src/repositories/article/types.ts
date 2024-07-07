@@ -20,4 +20,5 @@ export type ArticleRepositoryData = {
   toggleFavorite: (article: Article) => Promise<JsonDataResponse<Article>>
   self: (params: IndexParams) => Promise<PaginatedResponse<Article>>
   update: (params: UpdateParams) => Promise<JsonDataResponse<Article>>
+  delete: (article: Article) => Promise<JsonResponse>
 }
