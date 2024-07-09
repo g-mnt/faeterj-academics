@@ -52,7 +52,7 @@ export const PublishArticleScreen = withAuthLayout(() => {
       const { error } = await fetchPost(formData)
       if (error === null) {
         successToast('Artigo criado com sucesso')
-        navigation.navigate('Home')
+        navigation.navigate('SelfArticles')
       }
     }
   }

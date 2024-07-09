@@ -170,7 +170,8 @@ const styles = StyleSheet.create({
   articleTitle: {
     textAlign: 'center',
     fontWeight: 700,
-    fontSize: 20
+    fontSize: 20,
+    maxWidth: '80%'
   },
   articlePage: {
     textAlign: 'center',
