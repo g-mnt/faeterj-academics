@@ -3,7 +3,6 @@ import { type StackNavigationProp } from '@react-navigation/stack'
 import { type Article } from 'src/types/models/article'
 export type GuestStackParamList = {
   Login: undefined
-  ForgotPassword: undefined
 }
 
 export type ApplicationStackParamList = {

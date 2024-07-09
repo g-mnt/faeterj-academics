@@ -1,10 +1,8 @@
 import React, { useState } from 'react'
-import { View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { Button, Icon, TextInput } from 'react-native-paper'
 import { withGuestLayout } from 'src/HOC/withGuestLayout'
 import { type LoginForm } from 'screens/login/types'
-import { type GuestStackScreenProps } from 'navigations/types'
-import { useNavigation } from '@react-navigation/native'
 import { AuthRepository } from 'repositories/auth'
 import { useFetch } from 'hooks/useFetch'
 import { useAuthenticate } from 'hooks/useAuthenticate'
@@ -19,7 +17,6 @@ const formSchema = object({
 })
 
 export const LoginScreen = withGuestLayout(() => {
-  const { navigate } = useNavigation<GuestStackScreenProps>()
   const { control, handleSubmit, formState: { errors } } = useForm<LoginForm>({ resolver: yupResolver(formSchema) })
   const [, fetchLogin] = useFetch(AuthRepository.login)
   const { authenticate } = useAuthenticate()
@@ -32,8 +29,8 @@ export const LoginScreen = withGuestLayout(() => {
     }
   }
   return (
-    <View style={{ flex: 1, justifyContent: 'center', width: '100%', maxWidth: 520 }}>
-      <View style={{ flex: 2, justifyContent: 'center', alignItems: 'center' }}>
+    <View style={styles.mainContainer}>
+      <View style={styles.logoContainer}>
         <Icon size={120} source={require('@assets/app_icon.jpg')} />
       </View>
       <View style={{ flex: 2 }}>
@@ -82,16 +79,6 @@ export const LoginScreen = withGuestLayout(() => {
                 />
               )}
             />
-
-            <Button
-              style={{ alignSelf: 'center' }}
-              labelStyle={{ fontSize: 16, fontWeight: 'normal' }}
-              rippleColor="transparent"
-              mode="text"
-              onPress={() => { navigate('ForgotPassword') }}
-            >
-              Esqueci minha senha
-            </Button>
           </View>
           <Button
             mode="contained"
@@ -104,4 +91,18 @@ export const LoginScreen = withGuestLayout(() => {
       </View>
     </View>
   )
+})
+
+const styles = StyleSheet.create({
+  mainContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    width: '100%',
+    maxWidth: 520
+  },
+  logoContainer: {
+    flex: 2,
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
 })
