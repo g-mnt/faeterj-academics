@@ -1,20 +1,23 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { type ReactNode } from 'react'
+import { PaperProvider, useTheme } from 'react-native-paper'
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
+import { Navigations } from 'src/navigations'
+import * as SplashScreen from 'expo-splash-screen'
+import { Toast } from 'src/components/Toast'
 
-export default function App() {
+SplashScreen.preventAutoHideAsync().catch(() => {})
+
+export default function App (): ReactNode {
+  const { colors } = useTheme()
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+      <SafeAreaProvider>
+          <SafeAreaView style={{ flex: 1 }}>
+              <PaperProvider theme={{ dark: false, colors: { ...colors, primary: '#425381' } }}>
+                <Navigations />
+                <Toast />
+              </PaperProvider>
+          </SafeAreaView>
+      </SafeAreaProvider>
+  )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
