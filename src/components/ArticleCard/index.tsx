@@ -32,7 +32,7 @@ export const ArticleCard = ({ article, type = 'favorite', onPress, onPressStar, 
               : type === 'approval' ? <ArticleStatus status={article.status} /> : null
             }
           </View>
-          <Text numberOfLines={3} style={styles.articleDescription}>{article.description}</Text>
+          <Text numberOfLines={4} style={styles.articleDescription}>{article.description}</Text>
           <Author author={article.author} />
         </Card.Content>
       </TouchableOpacity>
